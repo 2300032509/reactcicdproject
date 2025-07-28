@@ -14,25 +14,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout the repository code
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      # 2️⃣ Set up Node.js environment
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20 # Vite works great with Node 18/20; 24 is very new
+          node-version: 24
 
-      - name: Install Dependencies
+      # 3️⃣ Install dependencies using npm ci (clean install)
+      - name: Install dependencies
         run: npm ci
 
+      # 4️⃣ Build the React + Vite project (creates `dist/` folder)
       - name: Build the Project
         run: npm run build
 
-      - name: Configure Git
+      # 5️⃣ Configure Git (needed for pushing to `gh-pages`)
+      - name: Configure Git Identity
         run: |
           git config --global user.name "2300032509"
           git config --global user.email "2300032509@kluniversity.in"
 
+      # 6️⃣ Deploy the built files to GitHub Pages (`gh-pages` branch)
       - name: Deploy to GitHub Pages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
